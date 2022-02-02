@@ -21,16 +21,24 @@ class Overworld {
         const step = () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-            this.map.drawLowerImage(this.ctx);
-            
+            // Estabilish the camera person
+            const cameraPerson = this.map.gameObjects.hero;
+
+            // Update all objects
             Object.values(this.map.gameObjects).forEach(object => {
                 object.update({
                     arrow: this.directionInput.direction
                 });
-                object.sprite.draw(this.ctx);
             });
 
-            this.map.drawUpperImage(this.ctx);
+            this.map.drawLowerImage(this.ctx, cameraPerson);
+            
+            // Draw game objects
+            Object.values(this.map.gameObjects).forEach(object => {
+                object.sprite.draw(this.ctx, cameraPerson);
+            });
+
+            this.map.drawUpperImage(this.ctx, cameraPerson);
 
             requestAnimationFrame(() => {
                 step();
