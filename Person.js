@@ -15,31 +15,56 @@ class Person extends GameObject {
     }
 
     update(state) {
-        this.updatePosition();
-        this.updateSprite(state);
+        if (this.movingProgressRemaining > 0) {
+            this.updatePosition();
+        } else {
+            // TODO: More cases for starting to walk will come here
+            //
+            //
+            // Case: we re keyboard ready and have an arrow pressed
+            if (this.isPlayerControlled && state.arrow) {
+                this.startBehavior(state, {
+                    type: 'walk',
+                    direction: state.arrow
+                });
+            }
 
-        if (this.isPlayerControlled && this.movingProgressRemaining === 0 && state.arrow) {
-            this.direction = state.arrow;
-            this.movingProgressRemaining = 16;
+            this.updateSprite();
         }
     }
 
     updatePosition() {
-        if (this.movingProgressRemaining > 0) {
-            const [property, change] = this.directionUpdate[this.direction];
-            this[property] += change;
-            this.movingProgressRemaining -= 1;
-        }
+        const [property, change] = this.directionUpdate[this.direction];
+        this[property] += change;
+        this.movingProgressRemaining -= 1;
     }
 
-    updateSprite(state) {
-        if (this.isPlayerControlled && this.movingProgressRemaining === 0 && !state.arrow) {
-            this.sprite.setAnimation(`idle-${ this.direction }`);
-            return;
-        }
-
+    updateSprite() {
         if (this.movingProgressRemaining > 0) {
             this.sprite.setAnimation(`walk-${ this.direction }`);
+            return;
+        }
+        
+        this.sprite.setAnimation(`idle-${ this.direction }`);
+    }
+
+    startBehavior(state, behavior) {
+        // Set character direction to whatever behavior has
+        this.direction = behavior.direction;
+        
+        switch(behavior.type) {
+            case 'walk':
+                // Stop here if space is not free (collision)
+                if (state.map.isSpaceTaken(this.x, this.y, this.direction)) {
+                    return;
+                }
+
+                // Ready to walk
+                state.map.moveWall(this.x, this.y, this.direction);
+                this.movingProgressRemaining = 16;
+                break;
+            default:
+                console.log('person behavior not treated');
         }
     }
 
