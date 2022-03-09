@@ -37,6 +37,13 @@ class Person extends GameObject {
         const [property, change] = this.directionUpdate[this.direction];
         this[property] += change;
         this.movingProgressRemaining -= 1;
+
+        if (this.movingProgressRemaining === 0) {
+            // We finished the walk
+            utils.emitEvent('PersonWalkingComplete', {
+                whoId: this.id
+            });
+        }
     }
 
     updateSprite() {
@@ -62,6 +69,14 @@ class Person extends GameObject {
                 // Ready to walk
                 state.map.moveWall(this.x, this.y, this.direction);
                 this.movingProgressRemaining = 16;
+                this.updateSprite(state);
+                break;
+            case 'stand':
+                setTimeout(() => {
+                    utils.emitEvent('PersonStandComplete', {
+                        whoId: this.id
+                    });
+                }, behavior.time);
                 break;
             default:
                 console.log('person behavior not treated');
