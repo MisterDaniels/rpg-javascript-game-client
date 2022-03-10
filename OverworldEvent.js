@@ -17,7 +17,8 @@ class OverworldEvent {
             map: this.map
         }, {
             type: 'walk',
-            direction: this.event.direction
+            direction: this.event.direction,
+            retry: true
         });
 
         // Set up a handler to complete when correct person is done walking, then resolve the event
