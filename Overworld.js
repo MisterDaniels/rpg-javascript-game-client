@@ -19,6 +19,13 @@ class Overworld {
         
         this.map.startCutscene([
             {
+                type: 'textMessage',
+                text: 'HELLO THERE!'
+            }
+        ]);
+
+        /* this.map.startCutscene([
+            {
                 who: 'hero',
                 type: 'walk',
                 direction: 'down'
@@ -44,7 +51,7 @@ class Overworld {
                 direction: 'up',
                 time: 800
             }
-        ]);
+        ]); */
     }
 
     startGameLoop() {
