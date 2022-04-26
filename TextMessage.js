@@ -14,6 +14,21 @@ class TextMessage {
             <p>${this.text}</p>
             <button>Next</Button>
         `);
+
+        this.element.querySelector('button').addEventListener('click', () => {
+            // Close the message
+            this.done();
+        });
+
+        this.actionListener = new KeyPressListener('Enter', () => {
+            this.actionListener.unbind();
+            this.done();
+        });
+    }
+
+    done() {
+        this.element.remove();
+        this.onComplete();
     }
 
     init(container) {

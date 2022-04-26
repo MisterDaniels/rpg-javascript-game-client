@@ -7,9 +7,17 @@ class Overworld {
         this.map = null;
     }
 
+    bindActionInput() {
+        new KeyPressListener('Enter', () => {
+            this.map.checkForActionCutscene();
+        });
+    }
+
     init() {
         this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
         this.map.mountObjects();
+
+        this.bindActionInput();
 
         this.directionInput = new DirectionInput();
         this.directionInput.init();
@@ -18,6 +26,32 @@ class Overworld {
         this.startGameLoop();
         
         this.map.startCutscene([
+            {
+                who: 'hero',
+                type: 'walk',
+                direction: 'down'
+            },
+            {
+                who: 'hero',
+                type: 'walk',
+                direction: 'down'
+            },
+            {
+                who: 'npcA',
+                type: 'walk',
+                direction: 'up'
+            },
+            {
+                who: 'npcA',
+                type: 'walk',
+                direction: 'left'
+            },
+            {
+                who: 'hero',
+                type: 'stand',
+                direction: 'right',
+                time: 200
+            },
             {
                 type: 'textMessage',
                 text: 'HELLO THERE!'

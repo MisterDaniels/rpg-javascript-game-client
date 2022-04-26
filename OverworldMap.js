@@ -61,6 +61,18 @@ class OverworldMap {
         this.addWall(x, y);
     }
 
+    checkForActionCutscene() {
+        const hero = this.gameObjects['hero'];
+        const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
+        const match = Object.values(this.gameObjects).find(object => {
+            return `${ object.x },${ object.y }` === `${ nextCoords.x },${ nextCoords.y }`;
+        });
+
+        if (!this.isCutscenePlaying && match && match.talking.length) {
+            this.startCutscene(match.talking[0].events);
+        }
+    }
+
     async startCutscene(events) {
         this.isCutscenePlaying = true;
 
@@ -119,6 +131,20 @@ window.OverworldMaps = {
                         type: 'stand',
                         direction: 'up',
                         time: 300
+                    }
+                ],
+                talking: [
+                    {
+                        events: [
+                            {
+                                type: 'textMessage',
+                                text: 'Whaaat...'
+                            },
+                            {
+                                type: 'textMessage',
+                                text: 'Get out dude!'
+                            }
+                        ]
                     }
                 ]
             }),
