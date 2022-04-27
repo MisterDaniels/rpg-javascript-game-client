@@ -1,8 +1,10 @@
+
 class OverworldMap {
 
     constructor(config) {
         this.gameObjects = config.gameObjects;
         this.walls = config.walls || {};
+        this.triggers = config.triggers || {};
         
         this.lowerImage = new Image();
         this.lowerImage.src = config.lowerSrc;
@@ -73,6 +75,15 @@ class OverworldMap {
         }
     }
 
+    checkForTriggers() {
+        const hero = this.gameObjects['hero'];
+        const match = this.triggers[`${ hero.x },${ hero.y }`];
+
+        if (!this.isCutscenePlaying && match) {
+            this.startCutscene( match[0].events );
+        }
+    }
+
     async startCutscene(events) {
         this.isCutscenePlaying = true;
 
@@ -138,11 +149,17 @@ window.OverworldMaps = {
                         events: [
                             {
                                 type: 'textMessage',
-                                text: 'Whaaat...'
+                                text: 'Whaaat...',
+                                faceHero: 'npcA'
                             },
                             {
                                 type: 'textMessage',
                                 text: 'Get out dude!'
+                            },
+                            {
+                                type: 'walk',
+                                who: 'hero',
+                                direction: 'up'
                             }
                         ]
                     }
@@ -175,6 +192,12 @@ window.OverworldMaps = {
                         direction: 'down'
                     }
                 ]
+            }),
+            npcC: new Person({
+                x: utils.withGrid(8),
+                y: utils.withGrid(5),
+                src: '/images/characters/people/npc2.png',
+                
             })
         },
         walls: {
@@ -183,6 +206,49 @@ window.OverworldMaps = {
             [utils.asGridCoord(8,6)]: true,
             [utils.asGridCoord(7,7)]: true,
             [utils.asGridCoord(8,7)]: true
+        },
+        triggers: {
+            [utils.asGridCoord(7,4)]: [
+                {
+                    events: [
+                        {
+                            who: 'npcC',
+                            type: 'walk',
+                            direction: 'left'
+                        },
+                        {
+                            who: 'npcC',
+                            type: 'stand',
+                            direction: 'up',
+                            time: 500
+                        },
+                        {
+                            type: 'textMessage',
+                            text: 'You cant be in there!'
+                        },
+                        {
+                            who: 'npcC',
+                            type: 'walk',
+                            direction: 'right'
+                        },
+                        {
+                            who: 'npcC',
+                            type: 'stand',
+                            direction: 'down'
+                        },
+                        {
+                            who: 'hero',
+                            type: 'walk',
+                            direction: 'down'
+                        },
+                        {
+                            who: 'hero',
+                            type: 'walk',
+                            direction: 'left'
+                        }
+                    ]
+                }
+            ]
         }
     },
     Kitchen: {

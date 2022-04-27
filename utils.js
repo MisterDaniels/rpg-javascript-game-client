@@ -44,6 +44,13 @@ const utils = {
         });
 
         document.dispatchEvent(event);
+    },
+
+    oppositeDirection(direction) {
+        if (direction === 'left') return 'right';
+        if (direction === 'right') return 'left';
+        if (direction === 'up') return 'down';
+        return 'up';
     }
 
 }

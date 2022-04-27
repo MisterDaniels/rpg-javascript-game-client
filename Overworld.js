@@ -13,11 +13,20 @@ class Overworld {
         });
     }
 
+    bindHeroPositionCheck() {
+        document.addEventListener('PersonWalkingComplete', e => {
+            if (e.detail.whoId === 'hero') {
+                this.map.checkForTriggers();
+            }
+        });
+    }
+
     init() {
         this.map = new OverworldMap(window.OverworldMaps.DemoRoom);
         this.map.mountObjects();
 
         this.bindActionInput();
+        this.bindHeroPositionCheck();
 
         this.directionInput = new DirectionInput();
         this.directionInput.init();
