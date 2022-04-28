@@ -2,6 +2,7 @@
 class OverworldMap {
 
     constructor(config) {
+        this.overworld = null;
         this.gameObjects = config.gameObjects;
         this.walls = config.walls || {};
         this.triggers = config.triggers || {};
@@ -248,6 +249,16 @@ window.OverworldMaps = {
                         }
                     ]
                 }
+            ],
+            [utils.asGridCoord(5,10)]: [
+                {
+                    events: [
+                        {
+                            type: 'changeMap',
+                            map: 'Kitchen'
+                        }
+                    ]
+                }
             ]
         }
     },
@@ -255,19 +266,26 @@ window.OverworldMaps = {
         lowerSrc: '/images/maps/KitchenLower.png',
         upperSrc: '/images/maps/KitchenUpper.png',
         gameObjects: {
-            hero: new GameObject({
-                x: 3,
-                y: 5
+            hero: new Person({
+                isPlayerControlled: true,
+                x: utils.withGrid(3),
+                y: utils.withGrid(5)
             }),
-            npc1: new GameObject({
-                x: 9,
-                y: 6,
-                src: '/images/characters/people/npc2.png'
-            }),
-            npc2: new GameObject({
-                x: 10,
-                y: 8,
-                src: '/images/characters/people/npc3.png'
+            npcB: new Person({
+                x: utils.withGrid(10),
+                y: utils.withGrid(8),
+                src: '/images/characters/people/npc3.png',
+                talking: [
+                    {
+                        events: [
+                            {
+                                type: 'textMessage',
+                                text: 'You made it!',
+                                faceHero: 'npcB'
+                            }
+                        ]
+                    }
+                ]
             })
         }
     }
