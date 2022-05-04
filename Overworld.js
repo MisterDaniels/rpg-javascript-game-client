@@ -38,13 +38,6 @@ class Overworld {
         this.directionInput.direction;
 
         this.startGameLoop();
-        
-        this.map.startCutscene([
-            {
-                type: 'textMessage',
-                text: 'HELLO THERE!'
-            }
-        ]);
 
         /* this.map.startCutscene([
             {
