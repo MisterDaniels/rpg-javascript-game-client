@@ -67,6 +67,19 @@ class Overworld {
                 time: 800
             }
         ]); */
+
+        /* this.map.startCutscene([
+            {
+                type: 'changeMap',
+                map: 'DemoRoom'
+            }
+        ]); */
+
+        this.map.startCutscene([
+            {
+                type: 'battle'
+            }
+        ]);
     }
 
     startGameLoop() {
